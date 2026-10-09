@@ -1,0 +1,5 @@
+# Tested together; bump as a set.
+# Requires Python 3.10 or 3.11 and Java 11 or 17 (Spark 3.5).
+pyspark==3.5.3
+delta-spark==3.2.1
+confluent-kafka==2.8.0

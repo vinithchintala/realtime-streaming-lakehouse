@@ -1,0 +1,23 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.env
+
+# Spark / Delta Lake local artifacts
+data/
+metastore_db/
+derby.log
+spark-warehouse/
+*.log
+
+# OS / editor
+.DS_Store
+.idea/
+.vscode/
+*.swp
+
+# Jupyter
+.ipynb_checkpoints/

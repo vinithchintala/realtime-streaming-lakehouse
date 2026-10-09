@@ -1,0 +1,46 @@
+# Single-node Redpanda (Kafka-compatible) + Redpanda Console for local dev.
+#
+# Start:   docker compose up -d
+# Console: http://localhost:8080  (browse the clickstream-events topic)
+# Stop:    docker compose down
+#
+# Spark itself runs as a local job on the host (see README prerequisites),
+# so it is intentionally not containerized here.
+
+services:
+  redpanda:
+    image: redpandadata/redpanda:v26.2.4
+    container_name: redpanda
+    command:
+      - redpanda
+      - start
+      - --smp
+      - "1"
+      - --overprovisioned
+      - --kafka-addr
+      - PLAINTEXT://0.0.0.0:9092
+      - --advertise-kafka-addr
+      - PLAINTEXT://redpanda:9092
+      - --pandaproxy-addr
+      - PLAINTEXT://0.0.0.0:8082
+      - --advertise-pandaproxy-addr
+      - PLAINTEXT://redpanda:8082
+    ports:
+      - "9092:9092"   # Kafka protocol (host apps connect here)
+      - "8082:8082"   # Pandaproxy (REST)
+      - "9644:9644"   # Admin API
+    volumes:
+      - redpanda-data:/var/lib/redpanda/data
+
+  console:
+    image: redpandadata/console:v3.12.0
+    container_name: redpanda-console
+    depends_on:
+      - redpanda
+    ports:
+      - "8080:8080"
+    environment:
+      KAFKA_BROKERS: redpanda:9092
+
+volumes:
+  redpanda-data:
